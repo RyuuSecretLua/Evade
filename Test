@@ -32,27 +32,19 @@ local function StartAutoGetBike()
     end)
 end
 
-local function StartAutoCollectDonut()
-    task.spawn(function()
-        while true do
-            if getgenv().Evade_Event.AutoCollectDonut then
-                pcall(function()
-                    local char = LocalPlayer.Character
-                    local root = char and char:FindFirstChild("HumanoidRootPart")
-                    if root then
-                        for _, obj in ipairs(workspace:GetDescendants()) do
-                            if obj.Name == "Donut" then
-                                local part = obj:IsA("BasePart") and obj or obj:IsA("Model") and obj.PrimaryPart
-                                if part then
-                                    root.CFrame = part.CFrame + Vector3.new(0, 3, 0)
-                                    task.wait(0.05)
-                                end
-                            end
-                        end
-                    end
-                end)
+local function CollectDonut(obj)
+    pcall(function()
+        local char = LocalPlayer.Character
+        local root = char and char:FindFirstChild("HumanoidRootPart")
+        if root then
+            local part = obj:IsA("BasePart") and obj or obj:IsA("Model") and obj.PrimaryPart
+            if part then
+                root.CFrame = part.CFrame + Vector3.new(0, 3, 0)
             end
-            task.wait(0.1)
+            local pp = obj:FindFirstChildWhichIsA("ProximityPrompt", true)
+            if pp then
+                fireproximityprompt(pp)
+            end
         end
     end)
 end
